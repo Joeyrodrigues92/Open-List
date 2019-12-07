@@ -1,8 +1,10 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { compose } from 'recompose';
+import AuthUserContext from './context';
+
 import { withFirebase } from '../Firebase';
-import * as ROUTES from '../../constants/routes';
+import * as ROUTES from '../../routes/routes';
 
 
 const withAuthorization = condition => Component => {
@@ -21,7 +23,14 @@ const withAuthorization = condition => Component => {
     }
     render() {
       return (
-        <Component {...this.props} />
+        // The protection of both pages/routes is almost done. 
+        // One refinement can be made in the withAuthorization higher-order component 
+        // using the authenticated user from the context:
+        <AuthUserContext.Consumer>
+        {authUser =>
+          condition(authUser) ? <Component {...this.props} /> : null
+        }
+      </AuthUserContext.Consumer>
       );
     }
   }
