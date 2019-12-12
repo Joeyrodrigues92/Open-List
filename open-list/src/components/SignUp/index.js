@@ -46,10 +46,12 @@ class SignUpFormBase extends Component {
           });
       })
       .then(authUser => {
+        console.log("OVER HERE", authUser)
         this.setState({ ...INITIAL_STATE });
         this.props.history.push(ROUTES.HOME);
       })
       .catch(error => {
+        console.log('err', error)
         this.setState({ error });
       });
 

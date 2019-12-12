@@ -82,3 +82,7 @@ export default Firebase;
 //   }
 // }
 // export default Firebase;
+
+//=========================================
+//DOC FOR AUTH USING FIREBASE 
+// https://www.robinwieruch.de/complete-firebase-authentication-react-tutorial#session-handling-with-higher-order-components
