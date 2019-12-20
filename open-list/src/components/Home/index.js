@@ -5,15 +5,160 @@
 // First, enhance the HomePage component with the higher-order 
 // component and define the authorization condition for it:
 
-import React from 'react';
-import { withAuthorization } from '../Session';
+import React, { Component } from 'react';
+
+import { AuthUserContext, withAuthorization } from '../Session';
+
+import ReactModal from 'react-modal';
+
+import * as ROUTES from '../../routes/routes';
+
+import Card from '../Card'
 
 
-const HomePage = () => (
-  <div>
-    <h1>Home Page</h1>
-    <p>The Home Page is accessible by every signed in user.</p>
-  </div>
-);
+
+class HomePage extends Component{
+
+  constructor (props) {
+    super(props);
+    this.state = {
+      showModal: false,
+      streetAdd: '',
+      cityAdd: '',
+      stateAdd: '',
+      zipAdd: '',
+      listCreated: false,
+      error: ''
+    };
+    
+    this.handleOpenModal = this.handleOpenModal.bind(this);
+    this.handleCloseModal = this.handleCloseModal.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleCardClick = this.handleCardClick.bind(this);
+  }
+  
+  handleOpenModal () {
+    this.setState({ showModal: true });
+  }
+  
+  handleCloseModal () {
+    this.setState({ showModal: false });
+  }
+
+  //MODAL PROP ADDRESS FORM
+  handleChange(event) {
+    this.setState({ [event.target.name]: event.target.value});
+  }
+
+  handleSubmit(event) {
+    if(this.state.streetAdd === '' && 
+    this.state.cityAdd === '' && 
+    this.state.streetAdd === '' && 
+    this.state.zipAdd === ''
+    ){
+      alert('Please Fill Out Form');
+    } else{
+    //close modal
+      this.handleCloseModal();
+
+    //this will tell us a list is created and in use, once realtor closes and saves current list listCreated: false.
+    // as long as its true realtor CAN NOT create another list (button will be hidden  )
+      this.setState({ listCreated: true })
+    }
+    event.preventDefault();
+  }
+
+  //CARD CLICKED ON
+  handleCardClick(){
+  console.log('CONDITION', this.state)
+
+  // CREATING A NEW REF ser/${uid}/lists
+  //  STORING PROPERTY ADDRESS
+  
+  this.props.firebase.createNewList(this.context.uid)
+   .set({
+     street: this.state.streetAdd,
+     city: this.state.cityAdd,
+     state: this.state.stateAdd,
+     zip: this.state.zipAdd
+    })
+    .then(() =>{
+      console.log('Work')
+      this.props.history.push(ROUTES.REGISTER);
+    })
+    .catch(error =>{
+      this.setState({
+        error: error
+      })
+    })
+   // Will redirect user to home of register 
+    
+    
+  }
+
+  render(){
+    const listCreated = this.state.listCreated;
+    let createdList;
+
+    if (listCreated) {
+      createdList = <Card handleCardClick={this.handleCardClick} propertyState={this.state} />
+    }
+
+    return(
+      <div>
+        <h1>Home Page</h1>
+
+          <button onClick={this.handleOpenModal}>Trigger Modal</button>
+          {/* MODAL TRIGGER ^ AND CONTENT IN MODAL v */}
+          <ReactModal 
+            isOpen={this.state.showModal}
+            contentLabel="Minimal Modal Example"
+            style={customStyles}
+          >
+            {/* <button onClick={this.handleCloseModal}>Close Modal</button> */}
+            <form onSubmit={this.handleSubmit}>
+              <label>
+                Property Address
+                <input name='streetAdd' type="text" value={this.state.streetAdd} onChange={this.handleChange} placeholder='Street Address' />
+                <input name='cityAdd' type="text" value={this.state.cityAdd} onChange={this.handleChange} placeholder='City' />
+                <input name='stateAdd' type="text" value={this.state.stateAdd} onChange={this.handleChange} placeholder='State Initials' />
+                <input name='zipAdd' type="text" value={this.state.zipAdd} onChange={this.handleChange} placeholder='Zip Code' />
+              </label>
+              <input type="submit" value="Submit" />
+            </form>
+            <button onClick={this.handleCloseModal}>Close</button>
+          </ReactModal>
+          {/* END MODAL */}
+
+
+
+
+          { createdList }
+
+      </div>
+    )
+  }
+  
+};
+
+const customStyles = {
+  content : {
+    top                   : '50%',
+    left                  : '50%',
+    right                 : 'auto',
+    bottom                : 'auto',
+    marginRight           : '-50%',
+    transform             : 'translate(-50%, -50%)'
+  }
+};
+
+
+//THIS WILL LET US USE THE INFO OF THE CURRENT  LOGGED IN USER
+//WE GET THIS INFO PASSED FROM THE errorUSERCONTEXT.PROVIDER IN witherrorentication.js
+//THIS WOULD BE LIKE THE AUTHCONTEXT.CONSUMER 
+HomePage.contextType =  AuthUserContext;
+
 const condition = authUser => !!authUser;
+
 export default withAuthorization(condition)(HomePage);

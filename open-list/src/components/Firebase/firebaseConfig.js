@@ -24,6 +24,8 @@ class Firebase {
 
   // *** AuTHENTICATION METHODS,  API ***
 
+
+
           //SIGN-UP
   doCreateUserWithEmailAndPassword = (email, password) =>
     this.auth.createUserWithEmailAndPassword(email, password);
@@ -47,6 +49,8 @@ class Firebase {
   user = uid => this.db.ref(`users/${uid}`);
   
   users = () => this.db.ref('users');
+
+  createNewList = uid => this.db.ref(`users/${uid}/lists`);
 }
 
 
