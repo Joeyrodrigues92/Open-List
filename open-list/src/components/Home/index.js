@@ -71,27 +71,42 @@ class HomePage extends Component{
 
   //CARD CLICKED ON
   handleCardClick(){
-  console.log('CONDITION', this.state)
 
-  // CREATING A NEW REF ser/${uid}/lists
-  //  STORING PROPERTY ADDRESS
-  
-  this.props.firebase.createNewList(this.context.uid)
-   .set({
-     street: this.state.streetAdd,
-     city: this.state.cityAdd,
-     state: this.state.stateAdd,
-     zip: this.state.zipAdd
-    })
-    .then(() =>{
-      console.log('Work')
-      this.props.history.push(ROUTES.REGISTER);
-    })
-    .catch(error =>{
-      this.setState({
-        error: error
+    //var ref = new Firebase(URL_TO_DATA);
+// this new, empty ref only exists locally
+//var newChildRef = ref.push();
+// we can get its id using key()
+//console.log('my new shiny id is '+newChildRef.key());
+// now it is appended at the end of data at the server
+//newChildRef.set({foo: 'bar'});
+
+  let createNewListKey = this.props.firebase.createNewList(this.context.uid).push();
+
+  createNewListKey
+    .set({
+      street: this.state.streetAdd,
+      city: this.state.cityAdd,
+      state: this.state.stateAdd,
+      zip: this.state.zipAdd,
+      open: true
       })
-    })
+      .then(() =>{
+
+        this.props.history.push({
+          pathname:ROUTES.REGISTER,
+          state:{
+            street: this.state.streetAdd,
+            city: this.state.cityAdd,
+            state: this.state.stateAdd,
+            zip: this.state.zipAdd
+          }
+        });
+      })
+      .catch(error =>{
+        this.setState({
+          error: error
+        })
+      })
    // Will redirect user to home of register 
     
     
@@ -136,6 +151,8 @@ class HomePage extends Component{
 
           { createdList }
 
+
+
       </div>
     )
   }
@@ -155,7 +172,7 @@ const customStyles = {
 
 
 //THIS WILL LET US USE THE INFO OF THE CURRENT  LOGGED IN USER
-//WE GET THIS INFO PASSED FROM THE errorUSERCONTEXT.PROVIDER IN witherrorentication.js
+//WE GET THIS INFO PASSED FROM THE errorUSERCONTEXT.PROVIDER IN withauthentication.js
 //THIS WOULD BE LIKE THE AUTHCONTEXT.CONSUMER 
 HomePage.contextType =  AuthUserContext;
 

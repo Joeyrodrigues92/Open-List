@@ -46,15 +46,26 @@ class Firebase {
 
         // *** User API  ***
 
-  user = uid => this.db.ref(`users/${uid}`);
-  
-  users = () => this.db.ref('users');
+    user = uid => this.db.ref(`users/${uid}`);
 
-  createNewList = uid => this.db.ref(`users/${uid}/lists`);
-}
+    users = () => this.db.ref('users');
+
+    createNewList = uid => this.db.ref(`users/${uid}/openList`);
+
+    addToList = uid => this.db.ref(`users/${uid}/openList/regUser`);
+
+    // closedList = 
+  } 
 
 
 export default Firebase;
+
+
+// starCountRef = firebase.database().ref('posts/' + postId + '/starCount');
+// addToList.on('value', function(snapshot) {
+//   console.log(snapshot.val())
+//  // updateStarCount(postElement, snapshot.val());
+// });
 
 
 
