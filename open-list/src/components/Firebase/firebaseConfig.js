@@ -38,7 +38,12 @@ class Firebase {
     doSignOut = () => this.auth.signOut();
 
           //RESET PSSWRD
-    doPasswordReset = email => this.auth.sendPasswordResetEmail(email);
+    doPasswordReset = email => this.auth.sendPasswordResetEmail(email).then(function() {
+      // Email sent.
+    }).catch(function(error) {
+      // An error happened.
+      console.log(error)
+    });
 
           //UPDATE PSSWRD
     doPasswordUpdate = password =>
@@ -52,7 +57,7 @@ class Firebase {
 
     createNewList = uid => this.db.ref(`users/${uid}/openList`);
 
-    addToList = uid => this.db.ref(`users/${uid}/openList/regUser`);
+    addToList = (uid, listKey) => this.db.ref(`users/${uid}/openList/${listKey}/regUser`);
 
     // closedList = 
   } 

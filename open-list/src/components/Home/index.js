@@ -81,6 +81,9 @@ class HomePage extends Component{
 //newChildRef.set({foo: 'bar'});
 
   let createNewListKey = this.props.firebase.createNewList(this.context.uid).push();
+   let key = createNewListKey.key;
+  //  let newKey = key.replace("-", "");
+
 
   createNewListKey
     .set({
@@ -98,11 +101,13 @@ class HomePage extends Component{
             street: this.state.streetAdd,
             city: this.state.cityAdd,
             state: this.state.stateAdd,
-            zip: this.state.zipAdd
+            zip: this.state.zipAdd,
+           listKey: key
           }
         });
       })
       .catch(error =>{
+        console.log('error', error)
         this.setState({
           error: error
         })

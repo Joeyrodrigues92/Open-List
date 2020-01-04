@@ -17,7 +17,8 @@ class Register extends Component{
             name: '',
             email: '',
             realtor: false,
-            usersOnList: []
+            usersOnList: [],
+            listKey: props.location.state.listKey 
         }
 
 
@@ -28,23 +29,43 @@ class Register extends Component{
     this.handleChange = this.handleChange.bind(this);
     this.handleCheck = this.handleCheck.bind(this);
     this.handleCloseList = this.handleCloseList.bind(this);
+    this.registerUserList = this.registerUserList.bind(this)
+    this.handleSetCloseModal =this.handleSetCloseModal.bind(this)
 
     }
 
+
+
+
     componentDidMount(){
         
-    
-        this.props.firebase.addToList(this.context.uid).on('value', function(snapshot){
-            let regUserList = snapshot.val();
-            console.log('BEFORE COND', regUserList)
 
-            // if(regUserList !== null){
-                
-            // }
-        })
+        this.props.firebase.addToList(this.context.uid, this.state.listKey)
+                //BIND IT TO HAVE this WORK PROPERLY 
+            .on('value', (snapshot) => {
 
-}
+                let regUserList = snapshot.val();
+ 
+                console.log('SNAPSHOT', regUserList)
+                 this.registerUserList(regUserList)
+
+            }, function (errorObject) {
+                console.log("The read failed: " + errorObject.code);
+            });        
+    }
   
+
+
+    registerUserList(list){
+        
+
+        if ( list != null){
+            console.log("List ",list)
+            const newList = Object.entries(list)
+            this.setState({ usersOnList: newList })
+        }
+    }
+
 
     handleOpenModal () {
         this.setState({ showModal: true });
@@ -77,13 +98,13 @@ class Register extends Component{
 
     //handle input change in form
     handleChange(event) {
-        console.log('handlechange')
+       // console.log('handlechange')
         this.setState({ [event.target.name]: event.target.value});
       }
 
 
     handleCheck() {
-        console.log('handlecheck')
+       // console.log('handlecheck')
         this.setState({realtor: !this.state.realtor});
     }
 
@@ -92,50 +113,46 @@ class Register extends Component{
 
     handleSubmit(event){
         event.preventDefault();
-    //     let dataArr = [];
-    //     let dataObj = {};
+        //let dataArr = this.state.usersOnList;
 
-    //   //  console.log('PROPS', this.props)
+        if(this.state.name === '' && 
+        this.state.email === ''
+        ){
+            alert('Please Fill Out Form');
+        }else {
 
-
-    //     if(this.state.name === '' && 
-    //     this.state.email === ''
-    //     ){
-
-    //       alert('Please Fill Out Form');
-
-    //     } else {
-
-
-
-
-
-
-       
-    //         let createNewReg = this.props.firebase.addToList(this.context.uid).push();
-
-    //         dataObj = {
-    //                 name: this.state.name,
-    //                 email: this.state.email,
-    //                 realtor: this.state.realtor
-    //             };
+            //let createNewReg = this.props.firebase.addToList(this.context.uid, this.state.listKey).push();
             
-    //         dataArr.push(dataObj)
+           let createNewReg = this.props.firebase.addToList(this.context.uid, this.state.listKey)
 
+            let dataObj = {
+                name: this.state.name,
+                email: this.state.email,
+                realtor: this.state.realtor
+            };
 
+            createNewReg
+            .push(dataObj)
 
-
-    //         createNewReg
-    //             .set(dataArr)
-
-             this.setState({ showModal: false });
+            this.setState({ showModal: false });
 
 
         //close modal
-             this.handleCloseModal();
+           // this.handleCloseModal();
 
-//        }
-}
+        }
+    };
+
+    handleSetCloseModal(){
+         //let createNewReg = this.props.firebase.addToList(this.context.uid, this.state.listKey).push();
+            
+        //  let createNewReg = this.props.firebase.addToList(this.context.uid, this.state.listKey)
+
+        // console.log('yerrr', this.state.usersOnList)
+
+    }
+
+
 
     handleCloseList(){
         //move list from /openList to /closedLists
@@ -147,7 +164,6 @@ class Register extends Component{
 
 
     render(){
-
         const { street, city, state, zip} = this.props.location.state;
 
         return (
