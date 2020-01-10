@@ -5,10 +5,11 @@ import './style.css';
 
 const Landing = () => (
   <div className='divCont'>
-    <h1>Landing Page</h1>
+    <h1>Open House List</h1>
     <p>The Landing Page is accessible by everyone.</p>
   </div>
 );
 
 // const condition = authUser => !!authUser;
+
 export default Landing

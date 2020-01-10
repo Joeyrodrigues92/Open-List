@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import ReactModal from 'react-modal';
 import { AuthUserContext, withAuthorization } from '../Session';
+import nodemailer from 'nodemailer';
+
 // import RegisterForm from './registerForm';
 
 
@@ -21,16 +23,15 @@ class Register extends Component{
             listKey: props.location.state.listKey 
         }
 
-
-    // this.handleCloseOutList = this.handleCloseOutList.bind(this);
+    // this.handleCloseList = this.handleCloseList.bind(this);
+   // this.handleSetCloseModal =this.handleSetCloseModal.bind(this)
+    this.handleCloseOutList = this.handleCloseOutList.bind(this);
     this.handleOpenModal = this.handleOpenModal.bind(this);
     this.handleCloseModal = this.handleCloseModal.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleCheck = this.handleCheck.bind(this);
-    this.handleCloseList = this.handleCloseList.bind(this);
     this.registerUserList = this.registerUserList.bind(this)
-    this.handleSetCloseModal =this.handleSetCloseModal.bind(this)
 
     }
 
@@ -46,7 +47,6 @@ class Register extends Component{
 
                 let regUserList = snapshot.val();
  
-                console.log('SNAPSHOT', regUserList)
                  this.registerUserList(regUserList)
 
             }, function (errorObject) {
@@ -58,7 +58,6 @@ class Register extends Component{
 
     registerUserList(list){
         
-
         if ( list != null){
             console.log("List ",list)
             const newList = Object.entries(list)
@@ -76,6 +75,13 @@ class Register extends Component{
     }
 
     handleCloseModal () {
+
+        this.setState({ showModal: false,
+            name: '',
+            email: '',
+            realtor: false
+        });
+
         //take us back to home 
 
     //   this.props.history.push({
@@ -115,7 +121,7 @@ class Register extends Component{
         event.preventDefault();
         //let dataArr = this.state.usersOnList;
 
-        if(this.state.name === '' && 
+        if(this.state.name === '' ||
         this.state.email === ''
         ){
             alert('Please Fill Out Form');
@@ -134,33 +140,46 @@ class Register extends Component{
             createNewReg
             .push(dataObj)
 
-            this.setState({ showModal: false });
-
-
-        //close modal
-           // this.handleCloseModal();
-
+            this.handleCloseModal()
+            // this.setState({ showModal: false,
+            //                 name: '',
+            //                 email: '',
+            //                 realtor: false
+            // });
         }
     };
 
-    handleSetCloseModal(){
-         //let createNewReg = this.props.firebase.addToList(this.context.uid, this.state.listKey).push();
-            
-        //  let createNewReg = this.props.firebase.addToList(this.context.uid, this.state.listKey)
+    handleCloseOutList(){
 
-        // console.log('yerrr', this.state.usersOnList)
+        console.log('list close')
+      // let testAccount = nodemailer.createTestAccount();
+        let mailTransportAuth = nodemailer.createTransport({
+            service: 'gmail',
+            // port: 587,
+            // secure: false,
+           // requireTLS: true,
+            auth: {
+                user: 'joeyrodrigues92@gmail.com',  
+                pass: 'cityhallG7'
+            }
+        });
 
+        const mailOptions = {
+            from: '"From me" <noreply@firebase.com>',
+            to: "joeyrodrigues92@gmail.com",
+            subjet: "testing",
+            text: "working"
+        };
+
+        mailTransportAuth.sendMail(mailOptions, function(error, info){
+            if (error) {
+              console.log(error);
+            } else {
+              console.log('Email sent: ' + info.response);
+            }
+        })
+       
     }
-
-
-
-    handleCloseList(){
-        //move list from /openList to /closedLists
-        //change list key (open) to false
-
-    }
-
-
 
 
     render(){
@@ -174,7 +193,7 @@ class Register extends Component{
 
                 <button onClick={this.handleOpenModal}>Register</button>
                 
-                <button onClick={this.handleCloseList}>Close Out List</button>
+                <button onClick={this.handleCloseOutList}>Close Out List</button>
  
                 <ReactModal 
                     isOpen={this.state.showModal}
@@ -190,6 +209,7 @@ class Register extends Component{
                         <input type="checkbox" onChange={this.handleCheck} defaultChecked={this.state.realtor}/>
                     </label>
                     <input type="submit" value="Submit" />
+                    <button onClick={this.handleCloseModal}>Close</button>
                     </form>
                     {/* <button onClick={this.handleCloseModal}>Close</button> */}
                 </ReactModal>

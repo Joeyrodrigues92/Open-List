@@ -23,9 +23,9 @@ import { withAuthentication } from '../Session';
 
 const App = () => (
   <Router>
-  <div>
+  <div style={{backgroundColor:'rgb(80,158,226)'}}>
     <Navigation />
-    <hr />
+    {/* <hr /> */}
     <Route exact path={ROUTES.LANDING} component={LandingPage} />
     <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
     <Route path={ROUTES.SIGN_IN} component={SignInPage} />

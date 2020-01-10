@@ -129,8 +129,12 @@ class HomePage extends Component{
       <div>
         <h1>Home Page</h1>
 
-          <button onClick={this.handleOpenModal}>Trigger Modal</button>
-          {/* MODAL TRIGGER ^ AND CONTENT IN MODAL v */}
+          <button onClick={this.handleOpenModal}>Create New List</button>
+          {/* MODAL TRIGGER ^ */}
+
+          <h2>Current Open List</h2>
+          { createdList }
+
           <ReactModal 
             isOpen={this.state.showModal}
             contentLabel="Minimal Modal Example"
@@ -150,14 +154,6 @@ class HomePage extends Component{
             <button onClick={this.handleCloseModal}>Close</button>
           </ReactModal>
           {/* END MODAL */}
-
-
-
-
-          { createdList }
-
-
-
       </div>
     )
   }

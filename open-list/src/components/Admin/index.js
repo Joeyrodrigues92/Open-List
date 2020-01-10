@@ -67,6 +67,10 @@ const UserList = ({ users }) => (
   </ul>
 );
 
+
+// const condition = authUser =>
+//   authUser && !!authUser.roles[ROLES.ADMIN];
+
 export default withFirebase(AdminPage);
 
 // We are using the users reference from our Firebase class to 
