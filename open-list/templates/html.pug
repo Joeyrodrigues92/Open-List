@@ -1,0 +1,19 @@
+
+var arr = #{arr}
+
+h1='People Who Visited Your Open House Today'
+ each val in arr
+    if val.realtor
+        h2='Name'
+        h4= val.name
+        h2= 'Email'
+        h4= val.email
+        h2='Realtor'
+        h4='Yes'
+        p='____________'
+    else 
+        h2='Name'
+        p= val.name
+        h2='Email'
+        p= val.email
+        p='____________'

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import ReactModal from 'react-modal';
 import { AuthUserContext, withAuthorization } from '../Session';
+import * as ROUTES from '../../routes/routes';
 
 import axios from "axios";
 
@@ -40,7 +41,6 @@ class Register extends Component{
 
 
     componentDidMount(){
-        
 
         this.props.firebase.addToList(this.context.uid, this.state.listKey)
                 //BIND IT TO HAVE this WORK PROPERLY 
@@ -142,49 +142,34 @@ class Register extends Component{
             .push(dataObj)
 
             this.handleCloseModal()
-            // this.setState({ showModal: false,
-            //                 name: '',
-            //                 email: '',
-            //                 realtor: false
-            // });
         }
     };
 
     handleCloseOutList(){
 
         console.log('list close')
+        let userEmail = this.props.firebase.auth.currentUser.email
 
+        let postObj = {
+            data : this.state.usersOnList,
+            userEmail: userEmail,
+        }
 
         console.log('FETCHING')
-        axios.post("/email", {test:'please work'})
+        axios.post("/email", postObj)
 
-      // let testAccount = nodemailer.createTestAccount();
-        // let mailTransportAuth = nodemailer.createTransport({
-        //     service: 'gmail',
-        //     // port: 587,
-        //     // secure: false,
-        //    // requireTLS: true,
-        //     auth: {
-        //         user: 'joeyrodrigues92@gmail.com',  
-        //         pass: 'cityhallG7'
-        //     }
-        // });
+            // WE NEED TO GO BACK HOME 
+            this.props.history.push({
+                pathname:ROUTES.HOME
+                // state:{
+                //   street: this.state.streetAdd,
+                //   city: this.state.cityAdd,
+                //   state: this.state.stateAdd,
+                //   zip: this.state.zipAdd,
+                //  listKey: key
+                // }
+              });
 
-        // const mailOptions = {
-        //     from: '"From me" <noreply@firebase.com>',
-        //     to: "joeyrodrigues92@gmail.com",
-        //     subjet: "testing",
-        //     text: "working"
-        // };
-
-        // mailTransportAuth.sendMail(mailOptions, function(error, info){
-        //     if (error) {
-        //       console.log(error);
-        //     } else {
-        //       console.log('Email sent: ' + info.response);
-        //     }
-        // })
-       
     }
 
 
