@@ -82,25 +82,6 @@ class Register extends Component{
             email: '',
             realtor: false
         });
-
-        //take us back to home 
-
-    //   this.props.history.push({
-    //     pathname:ROUTES.HOME,
-    //     state:{
-    //       name: this.state.name,
-    //       email: this.state.email,
-    //       realtor: this.state.realtor
-    //       showModal: this.state.showModal,
-    //      }
-    //    });
-
-
-
-        // have to change the state of listCreated to false
-        //take in all registered ppl, store in DB*
-
-
     }
 
     //handle input change in form
@@ -156,8 +137,12 @@ class Register extends Component{
         }
 
         console.log('FETCHING')
-        axios.post("/email", postObj)
+        //POST TO BACKEND TO SEND AN EMAIL
+        //axios.post("/email", postObj)
 
+        //console.log('YOOOO', this.props.firebase.createNewList(this.context.uid))
+        this.props.firebase.createNewList(this.context.uid).remove();
+            
             // WE NEED TO GO BACK HOME 
             this.props.history.push({
                 pathname:ROUTES.HOME

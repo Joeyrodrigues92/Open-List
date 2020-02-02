@@ -57,11 +57,12 @@ class Firebase {
 
     users = () => this.db.ref('users');
 
+    //WE WILL ALSO CALL THIS TO REMOVE FROM OUR DB WHEN ADMIN CLOSES OUT LIST.
     createNewList = uid => this.db.ref(`users/${uid}/openList`);
 
     addToList = (uid, listKey) => this.db.ref(`users/${uid}/openList/${listKey}/regUser`);
 
-    // closedList = 
+  
   } 
 
 

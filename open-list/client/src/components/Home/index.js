@@ -13,8 +13,6 @@ import ReactModal from 'react-modal';
 
 import * as ROUTES from '../../routes/routes';
 
-import Card from '../Card'
-
 
 class HomePage extends Component{
 
@@ -34,7 +32,7 @@ class HomePage extends Component{
     this.handleCloseModal = this.handleCloseModal.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleCardClick = this.handleCardClick.bind(this);
+    // this.handleCardClick = this.handleCardClick.bind(this);
   }
 
 
@@ -67,65 +65,46 @@ class HomePage extends Component{
     // as long as its true realtor CAN NOT create another list (button will be hidden  )
       this.setState({ listCreated: true })
     }
+
+
+  let createNewListKey = this.props.firebase.createNewList(this.context.uid).push();
+  let key = createNewListKey.key;
+ //  let newKey = key.replace("-", "");
+
+
+ createNewListKey
+   .set({
+     street: this.state.streetAdd,
+     city: this.state.cityAdd,
+     state: this.state.stateAdd,
+     zip: this.state.zipAdd,
+     open: true
+     })
+     .then(() =>{
+
+       this.props.history.push({
+         pathname:ROUTES.REGISTER,
+         state:{
+           street: this.state.streetAdd,
+           city: this.state.cityAdd,
+           state: this.state.stateAdd,
+           zip: this.state.zipAdd,
+          listKey: key
+         }
+       });
+     })
+     .catch(error =>{
+       console.log('error', error)
+       this.setState({
+         error: error
+       })
+     })
+
     event.preventDefault();
   }
 
-  //CARD CLICKED ON
-  handleCardClick(){
-
-    //var ref = new Firebase(URL_TO_DATA);
-// this new, empty ref only exists locally
-//var newChildRef = ref.push();
-// we can get its id using key()
-//console.log('my new shiny id is '+newChildRef.key());
-// now it is appended at the end of data at the server
-//newChildRef.set({foo: 'bar'});
-
-  let createNewListKey = this.props.firebase.createNewList(this.context.uid).push();
-   let key = createNewListKey.key;
-  //  let newKey = key.replace("-", "");
-
-
-  createNewListKey
-    .set({
-      street: this.state.streetAdd,
-      city: this.state.cityAdd,
-      state: this.state.stateAdd,
-      zip: this.state.zipAdd,
-      open: true
-      })
-      .then(() =>{
-
-        this.props.history.push({
-          pathname:ROUTES.REGISTER,
-          state:{
-            street: this.state.streetAdd,
-            city: this.state.cityAdd,
-            state: this.state.stateAdd,
-            zip: this.state.zipAdd,
-           listKey: key
-          }
-        });
-      })
-      .catch(error =>{
-        console.log('error', error)
-        this.setState({
-          error: error
-        })
-      })
-   // Will redirect user to home of register 
-    
-    
-  }
-
+  
   render(){
-    const listCreated = this.state.listCreated;
-    let createdList;
-
-    if (listCreated) {
-      createdList = <Card handleCardClick={this.handleCardClick} propertyState={this.state} />
-    }
-
     return(
       <div>
         <h1>Home Page</h1>
@@ -134,7 +113,6 @@ class HomePage extends Component{
           {/* MODAL TRIGGER ^ */}
 
           <h2>Current Open List</h2>
-          { createdList }
 
           <ReactModal 
             isOpen={this.state.showModal}
