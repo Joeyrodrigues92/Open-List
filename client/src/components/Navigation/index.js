@@ -107,7 +107,6 @@ const NavigationNonAuth = () => (
             <NavLink href={ROUTES.SIGN_IN}>Sign In</NavLink>
           </NavItem>
         </Nav>
-        <SignOutButton />
       </Collapse>
     </Navbar>
   </div>

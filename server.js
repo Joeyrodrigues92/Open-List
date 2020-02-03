@@ -57,7 +57,7 @@ app.post('/email', (req, res) =>{
     .send({
       template: path.join(__dirname, 'templates'),
       message: {
-        to: 'joeyrodrigues92@gmail.com '
+        to: 'syrodrigues95@gmail.com'
       },
       locals: {
         arr: userObjArr

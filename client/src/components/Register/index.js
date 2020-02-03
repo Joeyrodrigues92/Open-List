@@ -69,10 +69,6 @@ class Register extends Component{
 
     handleOpenModal () {
         this.setState({ showModal: true });
-        
-        //Form to register for open house will appear
-        //form will ask for -name -email -relator or not
-        // take in all register ppl, store i DB*
     }
 
     handleCloseModal () {
@@ -138,7 +134,7 @@ class Register extends Component{
 
         console.log('FETCHING')
         //POST TO BACKEND TO SEND AN EMAIL
-        //axios.post("/email", postObj)
+        axios.post("/email", postObj)
 
         //console.log('YOOOO', this.props.firebase.createNewList(this.context.uid))
         this.props.firebase.createNewList(this.context.uid).remove();
