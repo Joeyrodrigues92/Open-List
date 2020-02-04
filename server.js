@@ -65,7 +65,7 @@ app.post('/email', (req, res) =>{
     })
     .then(console.log)
     .catch(console.error);
-});
+}); 
 
 // create a GET route
 // app.get('/express_backend', (req, res) => {
@@ -80,9 +80,9 @@ app.post('/email', (req, res) =>{
 // });
 
 
-// app.use((req, res) =>
-//   res.sendFile(path.join(__dirname, "../client/build/index.html"))
-// );
+app.use((req, res) =>
+  res.sendFile(path.join(__dirname, "../client/build/index.html"))
+);
 
 
 //console.log that your server is up and running
