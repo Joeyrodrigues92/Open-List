@@ -55,8 +55,6 @@ app.post('/email', (req, res) =>{
     transport
   });
 
-
-   
   email
     .send({
       template: path.join(__dirname, 'templates'),
@@ -71,18 +69,6 @@ app.post('/email', (req, res) =>{
     .catch(console.error);
 }); 
 
-// create a GET route
-// app.get('/express_backend', (req, res) => {
-//   res.send({ express: 'YOUR EXPRESS BACKEND IS CONNECTED TO REACT' });
-// });
-
-
-
-
-// app.get('/hey', function (req, res) {
-//   res.sendFile(path.join(__dirname, 'client/public', 'index.html'));
-// });
-
 
 app.use((req, res) =>
   res.sendFile(path.join(__dirname, "../client/build/index.html"))
@@ -91,3 +77,10 @@ app.use((req, res) =>
 
 //console.log that your server is up and running
 app.listen(port, () => console.log(`Listening on port ${port}`));
+
+
+
+
+
+//          2-3-20
+// having a heroku issue, pushing works, just when you hit the link nothings happens.

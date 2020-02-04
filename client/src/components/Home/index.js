@@ -6,10 +6,11 @@
 // component and define the authorization condition for it:
 
 import React, { Component } from 'react';
-
+import './style.css';
 import { AuthUserContext, withAuthorization } from '../Session';
 
 import ReactModal from 'react-modal';
+import { Button } from 'reactstrap';
 
 import * as ROUTES from '../../routes/routes';
 
@@ -106,27 +107,33 @@ class HomePage extends Component{
   
   render(){
     return(
-      <div>
-        <h1>Home Page</h1>
+      <div className='container'>
+        <h1>DashBoard</h1>
+        <h3>To create a sign up sheet for your open house begin by clicking the ' Create New List ' button.</h3>
+        <p>New features coming soon</p>
 
-          <button onClick={this.handleOpenModal}>Create New List</button>
+        <Button
+          color="warning"
+          onClick={this.handleOpenModal}
+          >
+            Create New List
+        </Button>
           {/* MODAL TRIGGER ^ */}
 
-          <h2>Current Open List</h2>
-
+          {/* START MODAL */}
           <ReactModal 
             isOpen={this.state.showModal}
             contentLabel="Minimal Modal Example"
             style={customStyles}
           >
             {/* <button onClick={this.handleCloseModal}>Close Modal</button> */}
-            <form onSubmit={this.handleSubmit}>
+            <form className='formAddress'onSubmit={this.handleSubmit}>
               <label>
                 Property Address
-                <input name='streetAdd' type="text" value={this.state.streetAdd} onChange={this.handleChange} placeholder='Street Address' />
-                <input name='cityAdd' type="text" value={this.state.cityAdd} onChange={this.handleChange} placeholder='City' />
-                <input name='stateAdd' type="text" value={this.state.stateAdd} onChange={this.handleChange} placeholder='State Initials' />
-                <input name='zipAdd' type="text" value={this.state.zipAdd} onChange={this.handleChange} placeholder='Zip Code' />
+                <input className='addressForm' name='streetAdd' type="text" value={this.state.streetAdd} onChange={this.handleChange} placeholder='Street Address' />
+                <input className='addressForm' name='cityAdd' type="text" value={this.state.cityAdd} onChange={this.handleChange} placeholder='City' />
+                <input className='addressForm' name='stateAdd' type="text" value={this.state.stateAdd} onChange={this.handleChange} placeholder='State Initials' />
+                <input className='addressForm' name='zipAdd' type="text" value={this.state.zipAdd} onChange={this.handleChange} placeholder='Zip Code' />
               </label>
               <input type="submit" value="Submit" />
             </form>
@@ -146,7 +153,7 @@ const customStyles = {
     right                 : 'auto',
     bottom                : 'auto',
     marginRight           : '-50%',
-    transform             : 'translate(-50%, -50%)'
+    transform             : 'translate(-50%, -50%)',
   }
 };
 

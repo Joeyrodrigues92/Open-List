@@ -23,7 +23,7 @@ import { withAuthentication } from '../Session';
 
 const App = () => (
   <Router>
-  <div style={{backgroundColor:'rgb(80,158,226)'}}>
+  <div style={{backgroundColor:'rgb(79,131,184)'}}>
     <Navigation />
     {/* <hr /> */}
     <Route exact path={ROUTES.LANDING} component={LandingPage} />
