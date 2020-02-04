@@ -13,9 +13,13 @@ const port = process.env.PORT || 5000;
 // Configure body parsing for AJAX requests
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+// Serve up static assets
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
 }
+
+
+
 
 app.post('/email', (req, res) =>{
   let userObjArr = [];
@@ -81,7 +85,7 @@ app.post('/email', (req, res) =>{
 
 
 app.use((req, res) =>
-  res.sendFile(path.join(__dirname, "../client/build/index.html"))
+  res.sendFile(path.join(__dirname, "../client/public/index.html"))
 );
 
 
