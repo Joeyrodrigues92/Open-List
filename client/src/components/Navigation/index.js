@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { NavLink } from "react-router-dom";
+
 
 import SignOutButton from '../SignOut';
 import * as ROUTES from '../../routes/routes';
@@ -13,7 +13,7 @@ import {
   NavbarBrand,
   Nav,
   NavItem,
-  // NavLink,
+  NavLink,
   UncontrolledDropdown,
   DropdownToggle,
   DropdownMenu,
@@ -29,7 +29,8 @@ import {
 const Navigation = () => (
   <div>
     <AuthUserContext.Consumer>
-      {authUser =>
+      {
+        authUser =>
         authUser ? <NavigationAuth /> : <NavigationNonAuth />
       }
     </AuthUserContext.Consumer>
