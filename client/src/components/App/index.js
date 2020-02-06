@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   BrowserRouter as Router,
-  Route,
+  Route, Switch
 } from 'react-router-dom';
 
 import Navigation from "../Navigation";
@@ -26,7 +26,7 @@ const App = () => (
     <div style={{backgroundColor:'rgb(79,131,184)'}}>
 
       <Navigation />
-
+      <Switch>
       <Route exact path={ROUTES.LANDING} component={LandingPage} />
       <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
       <Route path={ROUTES.SIGN_IN} component={SignInPage} />
@@ -35,7 +35,7 @@ const App = () => (
       <Route path={ROUTES.ACCOUNT} component={AccountPage} />
       <Route path={ROUTES.ADMIN} component={AdminPage} />
       <Route path={ROUTES.REGISTER} component={Register} />
-      
+      </Switch>
     </div>
   </Router>
 )
