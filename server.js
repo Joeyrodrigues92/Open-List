@@ -16,12 +16,17 @@ app.use(express.json());
 // Serve up static assets
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
+
+  // The "catchall" handler
+app.get("/", (req, res) =>
+res.sendFile(path.join(__dirname, "./client/build/index.html"))
+);
 }
 
 
 
 
-app.post('/email', (req, res) =>{
+app.post('/email', (req, res) => {
   let userObjArr = [];
   let data = req.body.data;
 
@@ -69,21 +74,9 @@ app.post('/email', (req, res) =>{
     .catch(console.error);
 }); 
 
-// The "catchall" handler: for any request that doesn't
-// match one above, send back React's index.html file.
-app.get("/", (req, res) =>
-  res.sendFile(path.join(__dirname, "./client/build/index.html"))
-);
-
-
 
 
 //console.log that your server is up and running
 app.listen(port, () => console.log(`Listening on port ${port}`));
 
 
-
-
-
-//          2-3-20
-// having a heroku issue, pushing works, just when you hit the link nothings happens.
