@@ -16,11 +16,6 @@ app.use(express.json());
 // Serve up static assets
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
-
-  // // The "catchall" handler
-  // app.get("/", (req, res) =>
-  //   res.sendFile(path.join(__dirname, "./client/build/index.html"))
-  // );
 }
 
 
