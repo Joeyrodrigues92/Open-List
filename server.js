@@ -17,10 +17,10 @@ app.use(express.json());
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
 
-  // The "catchall" handler
-app.get("/", (req, res) =>
-res.sendFile(path.join(__dirname, "./client/build/index.html"))
-);
+  // // The "catchall" handler
+  // app.get("/", (req, res) =>
+  //   res.sendFile(path.join(__dirname, "./client/build/index.html"))
+  // );
 }
 
 
@@ -73,6 +73,11 @@ app.post('/email', (req, res) => {
     .then(console.log)
     .catch(console.error);
 }); 
+
+  // The "catchall" handler
+  app.get("/", (req, res) =>
+    res.sendFile(path.join(__dirname, "./client/build/index.html"))
+  );
 
 
 
