@@ -70,7 +70,7 @@ app.post('/email', (req, res) => {
 }); 
 
   // The "catchall" handler
-  app.get("/", (req, res) =>
+  app.get("*", (req, res) =>
     res.sendFile(path.join(__dirname, "./client/build/index.html"))
   );
 
