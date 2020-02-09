@@ -10,3 +10,7 @@
     flex-direction: column;
     justify-content: center;
 }
+
+#createAddSubmit{
+    margin-right: 50px;
+}

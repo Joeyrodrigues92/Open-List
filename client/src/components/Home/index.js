@@ -8,9 +8,9 @@
 import React, { Component } from 'react';
 import './style.css';
 import { AuthUserContext, withAuthorization } from '../Session';
-
+import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
 import ReactModal from 'react-modal';
-import { Button } from 'reactstrap';
+//import { Button } from 'reactstrap';
 
 import * as ROUTES from '../../routes/routes';
 
@@ -52,12 +52,20 @@ class HomePage extends Component{
   }
 
   handleSubmit(event) {
-    if(this.state.streetAdd === '' && 
-    this.state.cityAdd === '' && 
-    this.state.streetAdd === '' && 
+    console.log(
+    this.state.streetAdd, 
+    this.state.cityAdd, 
+    this.state.stateAdd,
+    this.state.zipAdd
+    )
+
+    if(this.state.streetAdd === '' || 
+    this.state.cityAdd === '' || 
+    this.state.stateAdd === '' ||
     this.state.zipAdd === ''
     ){
       alert('Please Fill Out Form');
+      
     } else{
     //close modal
       this.handleCloseModal();
@@ -65,7 +73,7 @@ class HomePage extends Component{
     //this will tell us a list is created and in use, once realtor closes and saves current list listCreated: false.
     // as long as its true realtor CAN NOT create another list (button will be hidden  )
       this.setState({ listCreated: true })
-    }
+    
 
 
   let createNewListKey = this.props.firebase.createNewList(this.context.uid).push();
@@ -101,7 +109,10 @@ class HomePage extends Component{
        })
      })
 
-    event.preventDefault();
+
+    }
+      event.preventDefault();
+
   }
 
   
@@ -127,7 +138,7 @@ class HomePage extends Component{
             style={customStyles}
           >
             {/* <button onClick={this.handleCloseModal}>Close Modal</button> */}
-            <form className='formAddress'onSubmit={this.handleSubmit}>
+            {/* <form className='formAddress'onSubmit={this.handleSubmit}>
               <label>
                 Property Address
                 <input className='addressForm' name='streetAdd' type="text" value={this.state.streetAdd} onChange={this.handleChange} placeholder='Street Address' />
@@ -137,7 +148,28 @@ class HomePage extends Component{
               </label>
               <input type="submit" value="Submit" />
             </form>
-            <button onClick={this.handleCloseModal}>Close</button>
+            <button onClick={this.handleCloseModal}>Close</button> */}
+            <Form>
+             <FormGroup>
+                <Label for="Street Address">Street Address</Label>
+                <Input value={this.state.streetAdd} onChange={this.handleChange} type="address" name="streetAdd" className="addressForm" placeholder="11 Example Way" />
+            </FormGroup>
+            <FormGroup>
+                <Label for="City">City</Label>
+                <Input  className='addressForm' name='cityAdd' type="text" value={this.state.cityAdd} onChange={this.handleChange} placeholder='City' />
+            </FormGroup>
+            <FormGroup>
+                <Label for="State">State Initials</Label>
+                <Input className='addressForm' name='stateAdd' type="text" value={this.state.stateAdd} onChange={this.handleChange} placeholder='State Initials' />
+            </FormGroup>
+            <FormGroup>
+                <Label for="Zip Code">Zip Code</Label>
+                <Input className='addressForm' name='zipAdd' type="text" value={this.state.zipAdd} onChange={this.handleChange} placeholder='Zip Code' />
+            </FormGroup>
+            <Button id='createAddSubmit' onClick={this.handleSubmit} color="warning">Submit</Button>
+            <Button onClick={this.handleCloseModal} color="danger">Close</Button>
+
+            </Form>
           </ReactModal>
           {/* END MODAL */}
       </div>

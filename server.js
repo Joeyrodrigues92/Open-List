@@ -24,13 +24,15 @@ if (process.env.NODE_ENV === "production") {
 app.post('/email', (req, res) => {
   let userObjArr = [];
   let data = req.body.data;
+  console.log('data', data)
 
   for (let i = 0; i < data.length; i++) {
       let userArr = data[i];
+      console.log('userArr', userArr)
     for (let j = 0; j < userArr.length; j++) {
       let userObj = userArr[j];
       if(typeof userObj === 'object'){
-          console.log('we got obj', userObj)
+        console.log('userObj', userObj.name)
         userObjArr.push(userObj)
     }
   }
@@ -59,7 +61,7 @@ app.post('/email', (req, res) => {
     .send({
       template: path.join(__dirname, 'templates'),
       message: {
-        to: 'syrodrigues95@gmail.com'
+        to: 'joeyrodrigues92@gmail.com'
       },
       locals: {
         arr: userObjArr

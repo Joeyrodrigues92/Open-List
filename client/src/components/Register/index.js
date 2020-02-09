@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import ReactModal from 'react-modal';
+import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
 import { AuthUserContext, withAuthorization } from '../Session';
 import * as ROUTES from '../../routes/routes';
-
+import './style.css';
 import axios from "axios";
 
 // import RegisterForm from './registerForm';
@@ -20,6 +21,7 @@ class Register extends Component{
             showModal: false,
             name: '',
             email: '',
+            number: '',
             realtor: false,
             usersOnList: [],
             listKey: props.location.state.listKey 
@@ -41,19 +43,18 @@ class Register extends Component{
 
 
     componentDidMount(){
-
         this.props.firebase.addToList(this.context.uid, this.state.listKey)
                 //BIND IT TO HAVE this WORK PROPERLY 
             .on('value', (snapshot) => {
 
                 let regUserList = snapshot.val();
- 
-                 this.registerUserList(regUserList)
+
+                this.registerUserList(regUserList);
 
             }, function (errorObject) {
                 console.log("The read failed: " + errorObject.code);
             });        
-    }
+    };
   
 
 
@@ -76,21 +77,22 @@ class Register extends Component{
         this.setState({ showModal: false,
             name: '',
             email: '',
+            number: '',
             realtor: false
         });
-    }
+    };
 
     //handle input change in form
     handleChange(event) {
-       // console.log('handlechange')
+
         this.setState({ [event.target.name]: event.target.value});
-      }
+    };
 
 
     handleCheck() {
        // console.log('handlecheck')
         this.setState({realtor: !this.state.realtor});
-    }
+    };
 
 
     //handle user input from form modal.
@@ -100,43 +102,40 @@ class Register extends Component{
         //let dataArr = this.state.usersOnList;
 
         if(this.state.name === '' ||
-        this.state.email === ''
+        this.state.email === '' ||
+        this.state.number === ''
         ){
             alert('Please Fill Out Form');
         }else {
-
-            //let createNewReg = this.props.firebase.addToList(this.context.uid, this.state.listKey).push();
             
-           let createNewReg = this.props.firebase.addToList(this.context.uid, this.state.listKey)
+           let createNewReg = this.props.firebase.addToList(this.context.uid, this.state.listKey);
 
             let dataObj = {
                 name: this.state.name,
                 email: this.state.email,
+                number: this.state.number,
                 realtor: this.state.realtor
             };
 
             createNewReg
-            .push(dataObj)
+                .push(dataObj);
 
-            this.handleCloseModal()
+            this.handleCloseModal();
         }
     };
 
     handleCloseOutList(){
 
-        console.log('list close')
-        let userEmail = this.props.firebase.auth.currentUser.email
+        let userEmail = this.props.firebase.auth.currentUser.email;
 
         let postObj = {
             data : this.state.usersOnList,
             userEmail: userEmail,
-        }
+        };
 
-        console.log('FETCHING')
         //POST TO BACKEND TO SEND AN EMAIL
-        axios.post("/email", postObj)
+        axios.post("/email", postObj);
 
-        //console.log('YOOOO', this.props.firebase.createNewList(this.context.uid))
         this.props.firebase.createNewList(this.context.uid).remove();
             
             // WE NEED TO GO BACK HOME 
@@ -150,8 +149,7 @@ class Register extends Component{
                 //  listKey: key
                 // }
               });
-
-    }
+    };
 
 
     render(){
@@ -172,18 +170,30 @@ class Register extends Component{
                     contentLabel="Minimal Modal Example"
                     style={customStyles}
                 >
-                    {/* <button onClick={this.handleCloseModal}>Close Modal</button> */}
-                    <form onSubmit={this.handleSubmit}>
-                    <label>
-                        <input name='name' type="text" value={this.state.name} onChange={this.handleChange} placeholder='Full Name' />
-                        <input name='email' type="text" value={this.state.email}  onChange={this.handleChange} placeholder='Email' />
-                        Realtor
-                        <input type="checkbox" onChange={this.handleCheck} defaultChecked={this.state.realtor}/>
-                    </label>
-                    <input type="submit" value="Submit" />
-                    <button onClick={this.handleCloseModal}>Close</button>
-                    </form>
-                    {/* <button onClick={this.handleCloseModal}>Close</button> */}
+                    <Form>
+                        <FormGroup>
+                            <Label for="examplePassword">Name</Label>
+                            <Input name='name' type="text" value={this.state.name} onChange={this.handleChange} placeholder='Full Name' />
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for="exampleEmail">Email</Label>
+                            <Input name='email' type="text" value={this.state.email} onChange={this.handleChange} placeholder='Email'/>
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for="exampleNumber">Phone Number</Label>
+                            <Input name='number' type="text" value={this.state.number} onChange={this.handleChange} placeholder='XXX-XXX-XXXX' />
+                        </FormGroup>
+                        <FormGroup check>
+                            <Label check>
+                            <Input type="checkbox" onChange={this.handleCheck} defaultChecked={this.state.realtor} />{' '}
+                            If Realtor Please Check-Off 
+                            </Label>
+                        </FormGroup>
+                        <div className='submitBtn'>
+                            <Button onClick={this.handleSubmit} color="warning">Submit</Button>
+                            <Button onClick={this.handleCloseModal} color="danger">Close</Button>
+                        </div>
+                    </Form>
                 </ReactModal>
             </div>
         );
