@@ -58,9 +58,9 @@ const NavigationAuth = (props) => {
             <NavItem>
               <NavLink href={ROUTES.ACCOUNT}>Account</NavLink>
             </NavItem>
-            <NavItem>
+            {/* <NavItem>
               <NavLink href={ROUTES.ADMIN}>Admin</NavLink>
-            </NavItem>
+            </NavItem> */}
           </Nav>
           <SignOutButton />
         </Collapse>
