@@ -1,19 +1,19 @@
 import React, { Component } from "react";
 import ReactModal from 'react-modal';
 import { 
+    Container,
+    Row,
+    Col,
     Button,
     Form,
     FormGroup,
     Label,
     Input,
-    FormText,
     Carousel,
     CarouselItem,
     CarouselControl,
     CarouselIndicators,
-    CarouselCaption,
-    Card, 
-    CardImg 
+    CarouselCaption, 
 } from 'reactstrap';
 import { AuthUserContext, withAuthorization } from '../Session';
 import * as ROUTES from '../../routes/routes';
@@ -206,9 +206,6 @@ class Register extends Component{
                     onExiting={ () => this.setState({tanimating: true})}
                     onExited={() => this.setState({animating: false})}
                 >
-                    {/* <Card> */}
-                        {/* <CardImg src={photo} alt="Card image cap" /> */}
-                    {/* </Card> */}
                     <img  src={photo} alt={photo} />
                     <CarouselCaption className="text-danger" captionText={photo.caption} captionHeader={photo.caption} />
                 </CarouselItem>
@@ -217,11 +214,10 @@ class Register extends Component{
 
 
         return (
-            <div>
+            <Container>
                 <h1>Welcome to this address</h1>
                 <h3>{street} {city}, {state} {zip}</h3>
                 <p>click on register button to sign yourself in</p>
-                
                 {/* IMAGE CAROUSEL */}
                 <Carousel
                     activeIndex={this.state.activeIndex}
@@ -269,7 +265,7 @@ class Register extends Component{
                         </div>
                     </Form>
                 </ReactModal>
-            </div>
+            </Container>
         );
     }
 }

@@ -10,9 +10,6 @@ import './style.css';
 import { AuthUserContext, withAuthorization } from '../Session';
 import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
 import ReactModal from 'react-modal';
-import axios from 'axios';
-//import ImageUploader from 'react-images-upload';
-
 import * as ROUTES from '../../routes/routes';
 
 
@@ -35,8 +32,6 @@ class HomePage extends Component{
     this.handleCloseModal = this.handleCloseModal.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-   // this.fileSelectHandler = this.fileSelectHandler.bind(this);
-    // this.handleCardClick = this.handleCardClick.bind(this);
   }
 
 
@@ -118,11 +113,6 @@ class HomePage extends Component{
       event.preventDefault();
   };
 
-  // onDrop(pictureFiles, pictureDataURLs) {
-	// 	this.setState({
-  //           pictures: this.state.pictures.concat(pictureFiles),
-  //       });
-  // }
   fileSelectHandler = event =>{
     if (event.target.files && event.target.files[0]) {
       let reader = new FileReader();
@@ -131,14 +121,8 @@ class HomePage extends Component{
       };
       reader.readAsDataURL(event.target.files[0]);
     }
-
-      // this.setState({
-      //   selectedFile:[...this.state.selectedFile, event.target.files[0]]
-      // })
   };
-  //  fileSelectHandler = () => {
 
-  //  }
   
   render(){
     return(
@@ -181,15 +165,7 @@ class HomePage extends Component{
               <Button id='createAddSubmit' onClick={this.handleSubmit} color="warning">Submit</Button>
               <Button onClick={this.handleCloseModal} color="danger">Close</Button>
             </Form>
-            {/* <ImageUploader
-                withIcon={true}
-                buttonText='Choose images'
-                onChange={this.onDrop}
-                imgExtension={['.jpg', '.gif', '.png', '.gif']}
-                maxFileSize={5242880}
-            /> */}
             <input type="file" onChange={this.fileSelectHandler}/>
-            {/* <Button onClick={this.fileUpload} color="primary">Upload</Button> */}
           </ReactModal>
           {/* END MODAL */}
       </div>
