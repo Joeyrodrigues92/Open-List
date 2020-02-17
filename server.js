@@ -58,18 +58,18 @@ app.post('/email', (req, res) => {
     transport
   });
 
-  email
-    .send({
-      template: path.join(__dirname, 'templates'),
-      message: {
-        to: userObj.email
-      },
-      locals: {
-        arr: userEmail
-      }
-    })
-    .then(console.log)
-    .catch(console.error);
+ // email
+    // .send({
+    //   template: path.join(__dirname, 'templates'),
+    //   message: {
+    //     to: userEmail
+    //   },
+    //   locals: {
+    //     arr: userObj
+    //   }
+    // })
+    // .then(console.log)
+    // .catch(console.error);
 }); 
 
   // The "catchall" handler

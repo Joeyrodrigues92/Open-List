@@ -3,3 +3,10 @@
     display: flex;
     justify-content: space-around;
 }
+.carousel-inner{
+    text-align: center;
+    display: block;
+}
+img{
+    height:500px;
+}

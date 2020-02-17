@@ -1,6 +1,20 @@
 import React, { Component } from "react";
 import ReactModal from 'react-modal';
-import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
+import { 
+    Button,
+    Form,
+    FormGroup,
+    Label,
+    Input,
+    FormText,
+    Carousel,
+    CarouselItem,
+    CarouselControl,
+    CarouselIndicators,
+    CarouselCaption,
+    Card, 
+    CardImg 
+} from 'reactstrap';
 import { AuthUserContext, withAuthorization } from '../Session';
 import * as ROUTES from '../../routes/routes';
 import './style.css';
@@ -24,19 +38,23 @@ class Register extends Component{
             number: '',
             realtor: false,
             usersOnList: [],
-            listKey: props.location.state.listKey 
+            listKey: props.location.state.listKey ,
+            activeIndex: 0,
+            animating: false
         }
 
     // this.handleCloseList = this.handleCloseList.bind(this);
    // this.handleSetCloseModal =this.handleSetCloseModal.bind(this)
-    this.handleCloseOutList = this.handleCloseOutList.bind(this);
-    this.handleOpenModal = this.handleOpenModal.bind(this);
-    this.handleCloseModal = this.handleCloseModal.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.handleCheck = this.handleCheck.bind(this);
-    this.registerUserList = this.registerUserList.bind(this)
-
+        this.handleCloseOutList = this.handleCloseOutList.bind(this);
+        this.handleOpenModal = this.handleOpenModal.bind(this);
+        this.handleCloseModal = this.handleCloseModal.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.handleCheck = this.handleCheck.bind(this);
+        this.registerUserList = this.registerUserList.bind(this)
+        this.next = this.next.bind(this)
+        this.previous = this.previous.bind(this)
+        this.goToIndex = this.goToIndex.bind(this)
     }
 
 
@@ -61,7 +79,6 @@ class Register extends Component{
     registerUserList(list){
         
         if ( list != null){
-            console.log("List ",list)
             const newList = Object.entries(list)
             this.setState({ usersOnList: newList })
         }
@@ -152,19 +169,76 @@ class Register extends Component{
     };
 
 
+    next(){
+        if (this.state.animating) return;
+       const nextIndex = this.state.activeIndex === this.props.location.state.photos.length - 1 ? 0 : this.state.activeIndex + 1;
+        this.setState({
+            activeIndex: nextIndex
+        })
+      }
+    
+    previous(){
+        if (this.state.animating) return;
+       const nextIndex = this.state.activeIndex === 0 ? this.props.location.state.photos - 1 : this.state.activeIndex - 1;
+        this.setState({
+            activeIndex: nextIndex
+        })
+    }
+    
+    goToIndex(newIndex){
+        if (this.state.animating) return;
+        this.setState({
+            activeIndex: newIndex
+        })
+    }
+    
+
+
     render(){
-        const { street, city, state, zip} = this.props.location.state;
+        const { street, city, state, zip, photos} = this.props.location.state;
+
+        const slides = photos.map((photo) => {
+            return (
+                <CarouselItem
+                    className="custom-tag"
+                    tag="div"
+                    key={photo.name}
+                    onExiting={ () => this.setState({tanimating: true})}
+                    onExited={() => this.setState({animating: false})}
+                >
+                    {/* <Card> */}
+                        {/* <CardImg src={photo} alt="Card image cap" /> */}
+                    {/* </Card> */}
+                    <img  src={photo} alt={photo} />
+                    <CarouselCaption className="text-danger" captionText={photo.caption} captionHeader={photo.caption} />
+                </CarouselItem>
+            );
+          });
+
 
         return (
             <div>
                 <h1>Welcome to this address</h1>
                 <h3>{street} {city}, {state} {zip}</h3>
                 <p>click on register button to sign yourself in</p>
+                
+                {/* IMAGE CAROUSEL */}
+                <Carousel
+                    activeIndex={this.state.activeIndex}
+                    next={this.next}
+                    previous={this.previous}
+                >
+                    <CarouselIndicators items={this.props.location.state.photos} activeIndex={this.state.activeIndex} onClickHandler={this.goToIndex} />
+                    {slides}
+                    <CarouselControl direction="prev" directionText="Previous" onClickHandler={this.previous} />
+                    <CarouselControl direction="next" directionText="Next" onClickHandler={this.next} />
+                </Carousel>
 
                 <button onClick={this.handleOpenModal}>Register</button>
                 
                 <button onClick={this.handleCloseOutList}>Close Out List</button>
- 
+
+                {/* REACT MODAL */}
                 <ReactModal 
                     isOpen={this.state.showModal}
                     contentLabel="Minimal Modal Example"

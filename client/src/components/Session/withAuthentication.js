@@ -30,9 +30,10 @@ const withAuthentication = Component => {
     componentWillUnmount() {
       this.listener();
     }
+
     render() {
       return (
-                //The  component can use the new context to provide the authenticated user to components that are interested in it
+    //The  component can use the new context to provide the authenticated user to components that are interested in it
 
         <AuthUserContext.Provider value={this.state.authUser}>
           <Component {...this.props} />

@@ -2,27 +2,27 @@ import React from 'react';
 import './style.css';
 import * as ROUTES from '../../routes/routes';
 // import { withAuthorization } from '../Session';
-
-import { Jumbotron, Button } from 'reactstrap';
+import { Container, Row, Col, Jumbotron, Button } from 'reactstrap';
 import { AuthUserContext } from '../Session';
 
 
 const Landing = () => (
   <div>
 
-    <AuthUserContext.Consumer>
-      
+    <AuthUserContext.Consumer> 
       {authUser =>
         authUser ? <LandingIn /> : <LandingOut />
       }
     </AuthUserContext.Consumer>
-
+    <Container>
+        <Row>
+          <Col>Create A List</Col>
+          <Col>Visitors Registor</Col>
+          <Col>Recevie Emails With Visitors Info</Col>
+        </Row>
+      </Container>
   </div>
 );
-
-
-
-
 
 const LandingOut = () => (
   

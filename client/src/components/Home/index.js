@@ -10,7 +10,8 @@ import './style.css';
 import { AuthUserContext, withAuthorization } from '../Session';
 import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
 import ReactModal from 'react-modal';
-//import { Button } from 'reactstrap';
+import axios from 'axios';
+//import ImageUploader from 'react-images-upload';
 
 import * as ROUTES from '../../routes/routes';
 
@@ -26,19 +27,22 @@ class HomePage extends Component{
       stateAdd: '',
       zipAdd: '',
       listCreated: false,
-      error: ''
+      error: '',
+      selectedFile: []
     };
     
     this.handleOpenModal = this.handleOpenModal.bind(this);
     this.handleCloseModal = this.handleCloseModal.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+   // this.fileSelectHandler = this.fileSelectHandler.bind(this);
     // this.handleCardClick = this.handleCardClick.bind(this);
   }
 
 
   
   handleOpenModal () {
+    console.log('hello')
     this.setState({ showModal: true });
   }
   
@@ -52,17 +56,18 @@ class HomePage extends Component{
   }
 
   handleSubmit(event) {
-    console.log(
-    this.state.streetAdd, 
-    this.state.cityAdd, 
-    this.state.stateAdd,
-    this.state.zipAdd
-    )
+    // console.log(
+    // this.state.streetAdd, 
+    // this.state.cityAdd, 
+    // this.state.stateAdd,
+    // this.state.zipAdd
+    // )
+
 
     if(this.state.streetAdd === '' || 
     this.state.cityAdd === '' || 
     this.state.stateAdd === '' ||
-    this.state.zipAdd === ''
+    this.state.zipAdd === '' 
     ){
       alert('Please Fill Out Form');
       
@@ -75,46 +80,65 @@ class HomePage extends Component{
       this.setState({ listCreated: true })
     
 
-
-  let createNewListKey = this.props.firebase.createNewList(this.context.uid).push();
-  let key = createNewListKey.key;
+      console.log('Photo State', this.state.selectedFile)
+      let createNewListKey = this.props.firebase.createNewList(this.context.uid).push();
+      let key = createNewListKey.key;
  //  let newKey = key.replace("-", "");
 
+      createNewListKey
+        .set({
+          // photos: this.state.selectedFile,
+          street: this.state.streetAdd,
+          city: this.state.cityAdd,
+          state: this.state.stateAdd,
+          zip: this.state.zipAdd,
+          open: true
+          })
+          .then(() =>{
 
- createNewListKey
-   .set({
-     street: this.state.streetAdd,
-     city: this.state.cityAdd,
-     state: this.state.stateAdd,
-     zip: this.state.zipAdd,
-     open: true
-     })
-     .then(() =>{
-
-       this.props.history.push({
-         pathname:ROUTES.REGISTER,
-         state:{
-           street: this.state.streetAdd,
-           city: this.state.cityAdd,
-           state: this.state.stateAdd,
-           zip: this.state.zipAdd,
-          listKey: key
-         }
-       });
-     })
-     .catch(error =>{
-       console.log('error', error)
-       this.setState({
-         error: error
-       })
-     })
-
-
-    }
+            this.props.history.push({
+              pathname:ROUTES.REGISTER,
+              state:{
+                street: this.state.streetAdd,
+                city: this.state.cityAdd,
+                state: this.state.stateAdd,
+                zip: this.state.zipAdd,
+                photos: this.state.selectedFile,
+                listKey: key
+              }
+            });
+          })
+          .catch(error =>{
+            console.log('error', error)
+            this.setState({
+              error: error
+            })
+          });
+    };
       event.preventDefault();
+  };
 
-  }
+  // onDrop(pictureFiles, pictureDataURLs) {
+	// 	this.setState({
+  //           pictures: this.state.pictures.concat(pictureFiles),
+  //       });
+  // }
+  fileSelectHandler = event =>{
+    if (event.target.files && event.target.files[0]) {
+      let reader = new FileReader();
+      reader.onload = (e) => {
+        this.setState({selectedFile: [...this.state.selectedFile, e.target.result]});
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    }
 
+      // this.setState({
+      //   selectedFile:[...this.state.selectedFile, event.target.files[0]]
+      // })
+  };
+  //  fileSelectHandler = () => {
+
+  //  }
   
   render(){
     return(
@@ -137,39 +161,35 @@ class HomePage extends Component{
             contentLabel="Minimal Modal Example"
             style={customStyles}
           >
-            {/* <button onClick={this.handleCloseModal}>Close Modal</button> */}
-            {/* <form className='formAddress'onSubmit={this.handleSubmit}>
-              <label>
-                Property Address
-                <input className='addressForm' name='streetAdd' type="text" value={this.state.streetAdd} onChange={this.handleChange} placeholder='Street Address' />
-                <input className='addressForm' name='cityAdd' type="text" value={this.state.cityAdd} onChange={this.handleChange} placeholder='City' />
-                <input className='addressForm' name='stateAdd' type="text" value={this.state.stateAdd} onChange={this.handleChange} placeholder='State Initials' />
-                <input className='addressForm' name='zipAdd' type="text" value={this.state.zipAdd} onChange={this.handleChange} placeholder='Zip Code' />
-              </label>
-              <input type="submit" value="Submit" />
-            </form>
-            <button onClick={this.handleCloseModal}>Close</button> */}
             <Form>
-             <FormGroup>
-                <Label for="Street Address">Street Address</Label>
-                <Input value={this.state.streetAdd} onChange={this.handleChange} type="address" name="streetAdd" className="addressForm" placeholder="11 Example Way" />
-            </FormGroup>
-            <FormGroup>
-                <Label for="City">City</Label>
-                <Input  className='addressForm' name='cityAdd' type="text" value={this.state.cityAdd} onChange={this.handleChange} placeholder='City' />
-            </FormGroup>
-            <FormGroup>
-                <Label for="State">State Initials</Label>
-                <Input className='addressForm' name='stateAdd' type="text" value={this.state.stateAdd} onChange={this.handleChange} placeholder='State Initials' />
-            </FormGroup>
-            <FormGroup>
-                <Label for="Zip Code">Zip Code</Label>
-                <Input className='addressForm' name='zipAdd' type="text" value={this.state.zipAdd} onChange={this.handleChange} placeholder='Zip Code' />
-            </FormGroup>
-            <Button id='createAddSubmit' onClick={this.handleSubmit} color="warning">Submit</Button>
-            <Button onClick={this.handleCloseModal} color="danger">Close</Button>
-
+              <FormGroup>
+                  <Label for="Street Address">Street Address</Label>
+                  <Input value={this.state.streetAdd} onChange={this.handleChange} type="address" name="streetAdd" className="addressForm" placeholder="11 Example Way" />
+              </FormGroup>
+              <FormGroup>
+                  <Label for="City">City</Label>
+                  <Input  className='addressForm' name='cityAdd' type="text" value={this.state.cityAdd} onChange={this.handleChange} placeholder='City' />
+              </FormGroup>
+              <FormGroup>
+                  <Label for="State">State Initials</Label>
+                  <Input className='addressForm' name='stateAdd' type="text" value={this.state.stateAdd} onChange={this.handleChange} placeholder='State Initials' />
+              </FormGroup>
+              <FormGroup>
+                  <Label for="Zip Code">Zip Code</Label>
+                  <Input className='addressForm' name='zipAdd' type="text" value={this.state.zipAdd} onChange={this.handleChange} placeholder='Zip Code' />
+              </FormGroup>
+              <Button id='createAddSubmit' onClick={this.handleSubmit} color="warning">Submit</Button>
+              <Button onClick={this.handleCloseModal} color="danger">Close</Button>
             </Form>
+            {/* <ImageUploader
+                withIcon={true}
+                buttonText='Choose images'
+                onChange={this.onDrop}
+                imgExtension={['.jpg', '.gif', '.png', '.gif']}
+                maxFileSize={5242880}
+            /> */}
+            <input type="file" onChange={this.fileSelectHandler}/>
+            {/* <Button onClick={this.fileUpload} color="primary">Upload</Button> */}
           </ReactModal>
           {/* END MODAL */}
       </div>
