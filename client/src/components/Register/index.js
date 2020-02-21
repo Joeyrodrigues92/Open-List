@@ -9,6 +9,7 @@ import {
     FormGroup,
     Label,
     Input,
+    CardImg,
     Carousel,
     CarouselItem,
     CarouselControl,
@@ -91,7 +92,8 @@ class Register extends Component{
 
     handleCloseModal () {
 
-        this.setState({ showModal: false,
+        this.setState({ 
+            showModal: false,
             name: '',
             email: '',
             number: '',
@@ -119,11 +121,11 @@ class Register extends Component{
         //let dataArr = this.state.usersOnList;
 
         if(this.state.name === '' ||
-        this.state.email === '' ||
-        this.state.number === ''
+            this.state.email === '' ||
+            this.state.number === ''
         ){
             alert('Please Fill Out Form');
-        }else {
+        } else {
             
            let createNewReg = this.props.firebase.addToList(this.context.uid, this.state.listKey);
 
@@ -171,18 +173,21 @@ class Register extends Component{
 
     next(){
         if (this.state.animating) return;
-       const nextIndex = this.state.activeIndex === this.props.location.state.photos.length - 1 ? 0 : this.state.activeIndex + 1;
+        const nextIndex = this.state.activeIndex === this.props.location.state.photos.length - 1 ? 0 : this.state.activeIndex + 1;
         this.setState({
             activeIndex: nextIndex
         })
-      }
+    }
     
     previous(){
         if (this.state.animating) return;
-       const nextIndex = this.state.activeIndex === 0 ? this.props.location.state.photos - 1 : this.state.activeIndex - 1;
-        this.setState({
-            activeIndex: nextIndex
-        })
+
+        if (this.state.activeIndex !== 0){
+            const nextIndex = this.state.activeIndex === 0 ? this.props.location.state.photos - 1 : this.state.activeIndex - 1;
+            this.setState({
+                 activeIndex: nextIndex
+             })
+        }
     }
     
     goToIndex(newIndex){
@@ -197,42 +202,14 @@ class Register extends Component{
     render(){
         const { street, city, state, zip, photos} = this.props.location.state;
 
-        const slides = photos.map((photo) => {
-            return (
-                <CarouselItem
-                    className="custom-tag"
-                    tag="div"
-                    key={photo.name}
-                    onExiting={ () => this.setState({tanimating: true})}
-                    onExited={() => this.setState({animating: false})}
-                >
-                    <img  src={photo} alt={photo} />
-                    <CarouselCaption className="text-danger" captionText={photo.caption} captionHeader={photo.caption} />
-                </CarouselItem>
-            );
-          });
-
-
         return (
             <Container>
-                <h1>Welcome to this address</h1>
+                <h1>Welcome to,</h1>
                 <h3>{street} {city}, {state} {zip}</h3>
                 <p>click on register button to sign yourself in</p>
-                {/* IMAGE CAROUSEL */}
-                <Carousel
-                    activeIndex={this.state.activeIndex}
-                    next={this.next}
-                    previous={this.previous}
-                >
-                    <CarouselIndicators items={this.props.location.state.photos} activeIndex={this.state.activeIndex} onClickHandler={this.goToIndex} />
-                    {slides}
-                    <CarouselControl direction="prev" directionText="Previous" onClickHandler={this.previous} />
-                    <CarouselControl direction="next" directionText="Next" onClickHandler={this.next} />
-                </Carousel>
-
-                <button onClick={this.handleOpenModal}>Register</button>
-                
-                <button onClick={this.handleCloseOutList}>Close Out List</button>
+                 <CardImg top width="100%" src={photos} alt="Card image cap" />
+                <Button onClick={this.handleOpenModal} color="warning">Register</Button>
+                <Button onClick={this.handleCloseOutList}>Close Out List</Button>
 
                 {/* REACT MODAL */}
                 <ReactModal 

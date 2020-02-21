@@ -34,10 +34,7 @@ class HomePage extends Component{
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-
-  
   handleOpenModal () {
-    console.log('hello')
     this.setState({ showModal: true });
   }
   
@@ -50,35 +47,43 @@ class HomePage extends Component{
     this.setState({ [event.target.name]: event.target.value});
   }
 
-  handleSubmit(event) {
-    // console.log(
-    // this.state.streetAdd, 
-    // this.state.cityAdd, 
-    // this.state.stateAdd,
-    // this.state.zipAdd
-    // )
-
-
-    if(this.state.streetAdd === '' || 
-    this.state.cityAdd === '' || 
-    this.state.stateAdd === '' ||
-    this.state.zipAdd === '' 
+  handleCheckComplete = () => {
+    if( 
+      this.state.streetAdd === '' || 
+      this.state.cityAdd === '' || 
+      this.state.stateAdd === '' ||
+      this.state.zipAdd === '' ||
+      this.state.selectedFile.length === 0
     ){
-      alert('Please Fill Out Form');
-      
-    } else{
+      return false;
+    }
+      return true;
+  };
+
+  btnDisable = () => {
+    if( 
+      this.state.streetAdd === '' || 
+      this.state.cityAdd === '' || 
+      this.state.stateAdd === '' ||
+      this.state.zipAdd === '' ||
+      this.state.selectedFile.length === 0
+    ){
+      return true;
+    }
+      return false;
+  };
+
+  // HANDLE ON CLICK SUBMIT METHOD
+  handleSubmit(event) {
     //close modal
       this.handleCloseModal();
 
     //this will tell us a list is created and in use, once realtor closes and saves current list listCreated: false.
     // as long as its true realtor CAN NOT create another list (button will be hidden  )
       this.setState({ listCreated: true })
-    
 
-      console.log('Photo State', this.state.selectedFile)
       let createNewListKey = this.props.firebase.createNewList(this.context.uid).push();
       let key = createNewListKey.key;
- //  let newKey = key.replace("-", "");
 
       createNewListKey
         .set({
@@ -109,7 +114,6 @@ class HomePage extends Component{
               error: error
             })
           });
-    };
       event.preventDefault();
   };
 
@@ -134,8 +138,8 @@ class HomePage extends Component{
         <Button
           color="warning"
           onClick={this.handleOpenModal}
-          >
-            Create New List
+        >
+          Create New List
         </Button>
           {/* MODAL TRIGGER ^ */}
 
@@ -162,10 +166,10 @@ class HomePage extends Component{
                   <Label for="Zip Code">Zip Code</Label>
                   <Input className='addressForm' name='zipAdd' type="text" value={this.state.zipAdd} onChange={this.handleChange} placeholder='Zip Code' />
               </FormGroup>
-              <Button id='createAddSubmit' onClick={this.handleSubmit} color="warning">Submit</Button>
+              <Input type="file" onChange={this.fileSelectHandler}/>
+              <Button id='createAddSubmit' disabled={this.btnDisable()} onClick={this.handleSubmit} color="warning">Submit</Button>
               <Button onClick={this.handleCloseModal} color="danger">Close</Button>
             </Form>
-            <input type="file" onChange={this.fileSelectHandler}/>
           </ReactModal>
           {/* END MODAL */}
       </div>
