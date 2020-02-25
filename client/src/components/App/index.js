@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   BrowserRouter as Router,
-  Route, Switch
+  Route, 
 } from 'react-router-dom';
 
 import Navigation from "../Navigation";
@@ -21,13 +21,51 @@ import { withAuthentication } from '../Session';
 
 
 
-const App = () => (
+const App = () => {
+  //const [registerForm, hideNav] = useState(false);
+  return(
+    <Router>
+      <div 
+        style={{backgroundColor:'rgb(79,131,184)'}}
+      >
+        <Navigation />
+          <Route exact path={ROUTES.LANDING} component={LandingPage} />
+          <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
+          <Route path={ROUTES.SIGN_IN} component={SignInPage} />
+          <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
+          <Route path={ROUTES.HOME} component={HomePage} />
+          <Route path={ROUTES.ACCOUNT} component={AccountPage} />
+          <Route path={ROUTES.ADMIN} component={AdminPage} />
+          <Route path={ROUTES.REGISTER} component={Register} />
+      </div>
+    </Router>
+  )
+}
+
+
+const RegisterApp = () => (
   <Router>
-    <div style={{backgroundColor:'rgb(79,131,184)'}}>
+    <div
+      style={{backgroundColor:'rgb(79,131,184)'}}
+    >
+      <Route exact path={ROUTES.LANDING} component={LandingPage} />
+      <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
+      <Route path={ROUTES.SIGN_IN} component={SignInPage} />
+      <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
+      <Route path={ROUTES.HOME} component={HomePage} />
+      <Route path={ROUTES.ACCOUNT} component={AccountPage} />
+      <Route path={ROUTES.ADMIN} component={AdminPage} />
+      <Route path={ROUTES.REGISTER} component={Register} />
+    </div>
+  </Router>
+)
 
+const NoRegisterApp = () => (
+  <Router>
+    <div 
+      style={{backgroundColor:'rgb(79,131,184)'}}
+    >
       <Navigation />
-
-  
         <Route exact path={ROUTES.LANDING} component={LandingPage} />
         <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
         <Route path={ROUTES.SIGN_IN} component={SignInPage} />
@@ -36,7 +74,6 @@ const App = () => (
         <Route path={ROUTES.ACCOUNT} component={AccountPage} />
         <Route path={ROUTES.ADMIN} component={AdminPage} />
         <Route path={ROUTES.REGISTER} component={Register} />
-    
     </div>
   </Router>
 )

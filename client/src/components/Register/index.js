@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import ReactModal from 'react-modal';
 import { 
     Container,
     Row,
@@ -10,11 +9,6 @@ import {
     Label,
     Input,
     CardImg,
-    Carousel,
-    CarouselItem,
-    CarouselControl,
-    CarouselIndicators,
-    CarouselCaption, 
 } from 'reactstrap';
 import { AuthUserContext, withAuthorization } from '../Session';
 import * as ROUTES from '../../routes/routes';
@@ -47,15 +41,11 @@ class Register extends Component{
     // this.handleCloseList = this.handleCloseList.bind(this);
    // this.handleSetCloseModal =this.handleSetCloseModal.bind(this)
         this.handleCloseOutList = this.handleCloseOutList.bind(this);
-        this.handleOpenModal = this.handleOpenModal.bind(this);
-        this.handleCloseModal = this.handleCloseModal.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleCheck = this.handleCheck.bind(this);
         this.registerUserList = this.registerUserList.bind(this)
-        this.next = this.next.bind(this)
-        this.previous = this.previous.bind(this)
-        this.goToIndex = this.goToIndex.bind(this)
+
     }
 
 
@@ -86,9 +76,7 @@ class Register extends Component{
     }
 
 
-    handleOpenModal () {
-        this.setState({ showModal: true });
-    }
+
 
     handleCloseModal () {
 
@@ -139,7 +127,14 @@ class Register extends Component{
             createNewReg
                 .push(dataObj);
 
-            this.handleCloseModal();
+            this.setState({ 
+                showModal: false,
+                name: '',
+                email: '',
+                number: '',
+                realtor: false
+            });
+
         }
     };
 
@@ -171,31 +166,17 @@ class Register extends Component{
     };
 
 
-    next(){
-        if (this.state.animating) return;
-        const nextIndex = this.state.activeIndex === this.props.location.state.photos.length - 1 ? 0 : this.state.activeIndex + 1;
-        this.setState({
-            activeIndex: nextIndex
-        })
-    }
-    
-    previous(){
-        if (this.state.animating) return;
 
-        if (this.state.activeIndex !== 0){
-            const nextIndex = this.state.activeIndex === 0 ? this.props.location.state.photos - 1 : this.state.activeIndex - 1;
-            this.setState({
-                 activeIndex: nextIndex
-             })
-        }
+  btnDisable = () => {
+    if( 
+        this.state.name === '' ||
+        this.state.email === '' ||
+        this.state.number === '' 
+    ){
+      return true;
     }
-    
-    goToIndex(newIndex){
-        if (this.state.animating) return;
-        this.setState({
-            activeIndex: newIndex
-        })
-    }
+      return false;
+  };
     
 
 
@@ -204,31 +185,28 @@ class Register extends Component{
 
         return (
             <Container>
-                <h1>Welcome to,</h1>
-                <h3>{street} {city}, {state} {zip}</h3>
-                <p>click on register button to sign yourself in</p>
-                 <CardImg top width="100%" src={photos} alt="Card image cap" />
-                <Button onClick={this.handleOpenModal} color="warning">Register</Button>
-                <Button onClick={this.handleCloseOutList}>Close Out List</Button>
-
-                {/* REACT MODAL */}
-                <ReactModal 
-                    isOpen={this.state.showModal}
-                    contentLabel="Minimal Modal Example"
-                    style={customStyles}
-                >
-                    <Form>
+                <Row className="registerDiv">
+                    <h1>{street} {city}, {state} {zip}</h1>
+                    {/* <CardImg top height src={photos} alt="Card image cap" /> */}
+                 </Row>
+                 <Row className="registerDiv">
+                    <Col>
+                        <CardImg top height src={photos} alt="Card image cap" />
+                    </Col>
+                    <Col id="formCol">
+                         <h2>Sign-In Below</h2>
+                        <Form>
                         <FormGroup>
-                            <Label for="examplePassword">Name</Label>
+                            {/* <Label for="examplePassword">Name</Label> */}
                             <Input name='name' type="text" value={this.state.name} onChange={this.handleChange} placeholder='Full Name' />
                         </FormGroup>
                         <FormGroup>
-                            <Label for="exampleEmail">Email</Label>
+                            {/* <Label for="exampleEmail">Email</Label> */}
                             <Input name='email' type="text" value={this.state.email} onChange={this.handleChange} placeholder='Email'/>
                         </FormGroup>
                         <FormGroup>
-                            <Label for="exampleNumber">Phone Number</Label>
-                            <Input name='number' type="text" value={this.state.number} onChange={this.handleChange} placeholder='XXX-XXX-XXXX' />
+                            {/* <Label for="exampleNumber">Phone Number</Label> */}
+                            <Input name='number' type="text" value={this.state.number} onChange={this.handleChange} placeholder='Phone Number' />
                         </FormGroup>
                         <FormGroup check>
                             <Label check>
@@ -237,11 +215,14 @@ class Register extends Component{
                             </Label>
                         </FormGroup>
                         <div className='submitBtn'>
-                            <Button onClick={this.handleSubmit} color="warning">Submit</Button>
-                            <Button onClick={this.handleCloseModal} color="danger">Close</Button>
+                            <Button disabled={this.btnDisable()} onClick={this.handleSubmit} color="warning">Submit</Button>
+                            <Button onClick={this.handleCloseOutList}>Close Out List</Button>
+
                         </div>
                     </Form>
-                </ReactModal>
+                    </Col>
+
+                </Row>
             </Container>
         );
     }

@@ -3,14 +3,14 @@
     display: flex;
     justify-content: space-around;
 }
-.carousel-inner{
-    text-align: center;
-    display: block;
-}
+
 img{
     height:500px;
 }
-/* .topCol{
-    display: block;
-    justify-content: center;
-} */
+.registerDiv {
+    margin-top: 20px;
+    display: flex;
+}
+#formCol{
+    margin: auto;
+}

@@ -51,7 +51,7 @@ app.post('/email', (req, res) => {
   const email = new Email({
     preview: false,
     message: {
-      from: 'Excited User <me@samples.mailgun.org>'
+      from: 'Open House Log'
     },
     // uncomment below to send emails in development/test env:
     send: true,
@@ -65,7 +65,7 @@ app.post('/email', (req, res) => {
         to: userEmail
       },
       locals: {
-        arr: userObj
+        arr: userObjArr
       }
     })
     .then(console.log)
